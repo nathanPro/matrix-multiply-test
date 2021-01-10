@@ -18,6 +18,6 @@ do
     fi
 done
 
-RUSTFLAGS="$flags" timeout -s9 30s cargo build --manifest-path ./Benchmarks/heap_vec_nolib/Cargo.toml
+RUSTFLAGS="$flags" timeout -s9 90s cargo build --manifest-path ./Benchmarks/heap_vec_nolib/Cargo.toml
 
 /usr/bin/time -f '%e' ./Benchmarks/heap_vec_nolib/target/debug/matrix_multiply_test $seed
