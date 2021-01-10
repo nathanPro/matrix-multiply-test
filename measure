@@ -1,6 +1,23 @@
 #!/bin/bash
 
+flags="-C lto=off -C no-prepopulate-passes -C passes=name-anon-globals"
+seed=""
+key=""
+
 for var in "$@"
 do
-    echo "$var"
+    if [ -z "$seed" ]; then
+	seed=$var
+    elif [ -z "$key" ]; then
+	key=$var
+    else
+	if [ "$var" -gt 0 ]; then
+	    flags="-C passes=$key $flags"
+	fi
+	key=""
+    fi
 done
+
+RUSTFLAGS=$flags timeout -s9 30s cargo build --manifest-path ./Benchmarks/heap_vec_nolib/Cargo.toml
+
+/usr/bin/time -f '%e' ./Benchmarks/heap_vec_no_lib/target/debug/matrix-multiply-test $seed
